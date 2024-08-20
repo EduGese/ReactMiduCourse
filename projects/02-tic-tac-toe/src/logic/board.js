@@ -18,3 +18,8 @@ export const checkWinner = (boardToCheck) => {
   export const checkEndGame = (newBoard) =>{
     return newBoard.every((square) => square !== null)
   }
+  // export const saveGame = ({board, turn}) =>{
+  //   window.localStorage.setItem('board', JSON.stringify(board))
+  //   window.localStorage.setItem('turn', turn)
+  // }
+ 

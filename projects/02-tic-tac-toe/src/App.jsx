@@ -9,11 +9,15 @@ import { WinnerModal } from './components/WinnerModal.jsx';
 
 function App() {
 //TABLERO
-const [board, setBoard] = useState(
-  Array(9).fill(null));
-
+const [board, setBoard] = useState(()=>{
+  const boardFromStorage = window.localStorage.getItem('board');
+  return boardFromStorage ? JSON.parse(boardFromStorage) : Array(9).fill(null);
+})
 //TURNO
-const [turn, setTurn] = useState(TURNS.X);
+const [turn, setTurn] = useState(()=>{
+  const turnFromStorage = window.localStorage.getItem('turn');
+  return turnFromStorage ? turnFromStorage : TURNS.X;
+});
 const updateBoard = (index) =>{//Jugada y cambio de turno
   //Actualizar tablero
   if(board[index] || winner) return;//Si ya existe una jugada en la celda no pinta nada (Para no sobrescribir)
@@ -24,6 +28,10 @@ const updateBoard = (index) =>{//Jugada y cambio de turno
   //Cambio de turno
   const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
   setTurn(newTurn);
+
+  //Guardar partida
+  window.localStorage.setItem('board', JSON.stringify(newBoard));
+  window.localStorage.setItem('turn', newTurn);
 
   //Revisar Ganador
   const newWinner = checkWinner(newBoard);
@@ -42,6 +50,8 @@ const resetGame = () => {
   setBoard(Array(9).fill(null));
   setTurn(TURNS.X);
   setWinner(null);
+  window.localStorage.removeItem('board');
+  window.localStorage.removeItem('turn');
 }
   return (
     <main className='board'>
